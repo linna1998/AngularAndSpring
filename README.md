@@ -1,40 +1,48 @@
-# This is an example application to show howto use Spring Boot, Angular and Mongodb with the Webflux features of Spring.
+# Student Event Engagement Portal
 
-![Build Status](https://travis-ci.org/Angular2Guy/AngularAndSpring.svg?branch=master)
+Authors:   Ke (Lina) Ding, Madhusmita Dash, Mengyu (Mia) Zhang, Xinyi He					
 
-Author: Sven Loesekann
+## Problem Statement (Theme: STEM+Covid-19)
 
-Technologies: Angular, Angular-Cli, Angular-Material, Typescript, Spring Boot, Spring Webflux, MongoDB, Maven, Docker
+1. Covid-19 outbreak all over the world
+2. Students study remotely may suffer from loneliness and depression
+3. Lack of interaction among students both for studies and leisure
+4. Interact with new students and get engaged in the portal
 
-## What is the goal?
+## Project Significance
 
-The goal is to be reactive from top to bottom. To do that the project uses Angular in the frontend and Spring Boot with Reactive Web as server. Mongodb is the database connected with the reactive MongoDB driver. That enables a reactive chain from the browser to the DB. The project uses an in memory MongoDB to be just cloned build and ready to run.
+1. Provide an online platform for students to get engaged in events
+2. Help protect mental and physical health of students under this tough time
+3. Propose a new format of online education and entertainment
 
-## What is it?
+## Tech Stack
+1. Front end: Angular.JS
+2. Backend: SpringBoot + MongoDb
+3. Deployment on Kubernetes using Kind
 
-The application runs a scheduled task reads the exchange rates of cryptocurrencies and stores them in the Mongodb. The UI uses the rest service to read the rates and displays them on a table. The table updates itself regularly. A detail page shows the data of the currency and a chart of the rates of the current day, 7 days, 30 days, 90 days. 
-If the user logs in the user can see the relevant part of the orderbooks for an order. The orderbooks route is implemented as a lazy loading feature module.
+## Project Overview
+1. Student Login Page
+2. View my profile page: 
+    - View the list of events created by me
+    - View the list of events subscribed by me
+    
+3. Events page:
+    - View the upcoming events for each category
+    - Select an event and join the link 
+4. Category of events:
+    - Wellness 
+    - Study
+    - Virtual Coffee Chats
+    - Games
+    - Random
 
-## Data Import and Preparation
+## Commands to build and run
+```
+./mvnw package && java -jar target/angularandspring-0.0.1-SNAPSHOT.jar
+docker build --build-arg JAR_FILE=angularandspring-0.0.1-SNAPSHOT.jar -t test .
+docker tag test mdash95/angularandspring
+docker push  mdash95/angularandspring
+kubectl port-forward angularandspringpodname 8081:8080
+```
 
-The application has two scheduled jobs. The first is the ScheduledTask class. It reads the rates of the crypto currencies once a minute with different initial delays. That job provides one mongodb collection per exchange. The collections can have different documents with currency pairs like Usd to BitCoin or Eur to Ether or one document with all currency pairs, depends on what the exchanges provide. These collections provide the data for the current day chart and the current quote. To display the 7 day, 30 day, 90 day charts, hourly or daily quotes are required. Once a day the PrepareData class runs jobs to calculate the hourly and daily quotes. The jobs run between 0 and 2 o’clock. If no values are available the for the timeframe(hour, day) a value of zero is shown. For the 7 day chart the hourly data is used and for the 30 and 90 day charts the daily data is used. The SchedulingConfig class provides a config that provides the scheduler with 5 threads to enable the running of ScheduledTask class for the imports and the PrepareData class for aggregation concurrently. 
 
-## Minikube setup
-
-The application can now be run in a Minikube cluster. The setup has a persistent volume to store the files of mongodb. A setup of mongodb with the volume and a setup for the application. It can be found in the minikube directory. Further documentation can be found in the wiki.
-
-## Setup
-
-MongoDB 3.4.x or newer.
-
-Eclipse Oxygen JEE or newer.
-
-Install Eclipse Plugin 'Eclipse Wild Web Developer' of the Eclipse Marketplace.
-
-Maven 3.3.3 or newer.
-
-Nodejs 12.16.x or newer
-
-Npm 6.13.x or newer
-
-Angular Cli 9 or newer.
